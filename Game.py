@@ -1,6 +1,7 @@
 from random import shuffle
 from copy import deepcopy
 import AI
+from time import time
 
 
 class Game():
@@ -23,16 +24,19 @@ class Game():
         self.gamestate=0
         self.game_round = 0
         self.turn = 0
+
     def play(self,r):#开始游戏
         self.game_round = r
+        self.time_count={'whole_time':0,'round_time':[0]*r}
         #r=int(input("玩多少局?"))
         for p in self.players_list:
             p.win_n=0
+        whole_start_t = time()
         while(r>0):
-            r-=1
             self.gametable.shuffle()#洗牌
             self.start()#发牌
             self.turn=1
+            r_start_t = time()
             while(self.gamestate==1):#游戏中。。。
                 if self.is_show in ['normal','full']:
                     print("\n\n第%d轮"%self.turn)
@@ -59,8 +63,13 @@ class Game():
                     i += 1
             for p in self.players_list:#玩家归还牌
                 p.reset()
+            r_end_t = time()
+            self.time_count['round_time'][self.game_round-r]=r_end_t-r_start_t
+            r -= 1
             #print("end",self.turn)
-        
+        whole_end_t = time()
+        self.time_count['whole_time'] = whole_end_t - whole_start_t
+
     def start(self):#发牌
         for i in range(0, 13):
             for p in self.players_list:
@@ -77,6 +86,10 @@ class Game():
                 print("!!!胜利者是:", self.winner, "\n")
             return True
         return False
+
+    def print_win_rate(self):
+        for p in self.players_list:
+                print(p.name+" ("+p.AI_name+") 胜率: %f"%(p.win_n / self.game_round))
 
 class Player():
 
@@ -120,36 +133,24 @@ class Player():
             if type == '摸牌':
                 print(self.name, ":", type,  end=" ")
             elif type == '出牌':
-                print(self.name,":", type, self.get_tile_name(tile), end="\n")
+                print(self.name,":", type, get_tile_name(tile), end="\n")
             elif type == '和牌':
                 print(self.name,":我和牌了!")
                 self.show_tiles()
             else:
                 print("操作类型有误")
         elif self.is_show == 'full':
-            print(self.name, type, self.get_tile_name(tile))
+            print(self.name, type, get_tile_name(tile))
             self.show_tiles()
         else:
             print("显示模式有误,应该为mute,normal 或 full")
 
+    def get_tiles_names(self):
+        s = "玩家: "+self.name+" -> "
+        return s + get_Cnt_names(self.cnt)
+    
     def show_tiles(self):
-        print("玩家:",self.name,"->")
-        for i in range(0, 3):
-            for j in range(0, 9):
-                e = self.cnt[i*9+j]
-                while(e):
-                    print("%d"%(j+1) + Gametable.type[i],end=' ')
-                    e-=1
-                    #print(e)
-                    if e<0:
-                        print("!")
-        for j in range(0,7):
-            e=self.cnt[27+j]
-            while(e):
-                print(Gametable.s_type[j] , end=' ')
-                e -= 1
-        print("\n")
-##
+        print(self.get_tiles_names())
 
 #游戏行为相关方法：
     def draw(self,gametable = None):
@@ -211,9 +212,10 @@ class Player():
                     self.cnt[gametable.receive_tiles[-1][1]] -= 2
                     self.peng +=1
                     if self.is_show in ["normal","full"]:
-                        print("\n",self.name,"碰了",gametable.receive_tiles[-1][0],"的",self.get_tile_name(gametable.receive_tiles[-1][1]))
+                        print("\n",self.name,"碰了",gametable.receive_tiles[-1][0],"的",get_tile_name(gametable.receive_tiles[-1][1]))
                         return True
         if self.Rules["吃"]:
+            #还没写
             pass
 
         return False
@@ -251,22 +253,41 @@ class Player():
 
 
 #其他方法：
-    def get_tile_name(self, t):
-        if t >= 0:
-            if t <= 26:
-                return str(t % 9 + 1) + Gametable.type[t // 9]
-            elif t <= 33:
-                return Gametable.s_type[t - 27]
-        return ''
+def get_tile_name(t):
+    if t >= 0:
+        if t <= 26:
+            return str(t % 9 + 1) + Gametable.type[t // 9]
+        elif t <= 33:
+            return Gametable.s_type[t - 27]
+    return ''
 
+def get_Tiles_names(tiles):
+    names = ''
+    for t in tiles:
+        names += get_tile_name(t)+' '
+    return names
+
+def get_Cnt_names(cnt):
+    names = ''
+    for i in range(len(cnt)):
+        e = cnt[i]
+        while(e>0):
+            names += get_tile_name(i)+' '
+            e -= 1
+    
+    return names
+    
+    
+    
+    
 class Gametable():
     type = ["万", "条", "桶"]
     s_type = ["东", "南", "西", "北", "白", "发", "中"]
 
     def __init__(self,debug = False):
-        self.Tiles=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33]
+        self.Tiles=list(range(0,34))*4
         #数字对应牌型0-8:"万";9-17:"条";18-26:"桶";27-33:"东","南","西","北","白","发","中"
-        #self.shuffle()#洗牌
+        #self.shuffle()#洗牌,没必要在这里洗，每次开局会洗
         self.debug=debug
 
 

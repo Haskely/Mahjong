@@ -1,3 +1,5 @@
+import Game
+
 AI_name_list=['no_AI','zr_AI','zx_AI(zrzr)','zx_AI(zrno)','zx_AI(nozr)','zx_AI(nono)','human']
 
 def init(player,gametable):
@@ -30,53 +32,82 @@ class human():
         self.player = player
         self.gametable = gametable
 
+    def Print_tiles(self):
+        print("你当前有牌:")
+        T_list = [None] * 14
+        k = 0
+        for t in range(0, 34):
+            e = self.player.cnt[t]
+            if e:
+                t_name = Game.get_tile_name(t)
+                while (e > 0):
+                    T_list[k] = t
+                    print(t_name, end="\t")
+                    k += 1
+                    e -= 1
+        print()
+        return k, T_list
+
+    def Print_peng_tiles(self):
+        out=""
+        for i in range(0, 34):
+            e = self.player.cnt_p[i]
+            if e:
+                t_name = Game.get_tile_name(i)
+                while (e > 0):
+                    out += t_name+"x3\t"
+                    e -= 1
+        if out == "":
+            print("你当前已经碰的牌:\t无\n")
+        else:
+            out += "\n"
+            print("你当前已经碰的牌:\t",out)
 
     def think_peng(self):
         self.Print_tiles()
-        print("\n你可以碰牌: ",self.player.cnt[self.gametable.receive_tiles[-1][1]],"\n你要碰吗？(1要,2不要)")
+        print("你可以碰牌: ",Game.get_tile_name(self.gametable.receive_tiles[-1][1]),"\n你要碰吗？(1要,2不要)")
         ans=input()
         if ans =="1":
             return True
         elif ans == "2":
             return False
 
-    def Print_tiles(self):
-        print("\n\n你当前有牌:")
-        T_list = [None]*14
-        k=0
-        for i in range(0,34):
-            e= self.player.cnt[i]
-            if e:
-                t_name=self.player.get_tile_name(i)
-                while(e>0):
-                    T_list[k]=i
-                    print(t_name, end="\t")
-                    k += 1
-                    e -= 1
-        print()
-        return k,T_list
-
-
     def think(self):
-        print("\n\n你摸到的牌:",self.player.get_tile_name(self.player.last_draw))
-        print("\n桌面上已出去的牌:")
+        print("\n\n你摸到的牌:\t",Game.get_tile_name(self.player.last_draw),end="\n\n")
+        print("桌面上已出去的牌:",end="\t")
         for t in range(0,34):
             if self.gametable.receive_cnt[t]:
-                print(self.player.get_tile_name(t),"x",self.gametable.receive_cnt[t],end="\t")
+                print(Game.get_tile_name(t),"x",self.gametable.receive_cnt[t],end="\t")
+        print("\n")
 
-
+        self.Print_peng_tiles()
         k,T_list = self.Print_tiles()
         
         for i in range(1,k+1):
             print(i,end="\t")
+        print("\n")
         while 1:
-            print("\n\n输入要出的牌编号:")
+            print("输入要出的牌编号:")
+            o = input()
+            if o == 'debug':
+                self.debug()
             try:
-                o=int(input())
-                if o in range(1,k+1):
-                    return T_list[o-1]
+                return T_list[int(o)-1]
             except:
                 print("编号有误请重新输入")
+
+
+    def debug(self):
+        from time import strftime,localtime,time
+        debug_info_str = "\nDEBUG\t[%s]\nGameTable_Tiles\t=\t%s\nGameTable_T_name\t=\t%s\nGameTable_receive_tiles\t=\t%s\nGameTable_r_t_name\t=\t%s\n "%(
+            strftime('%Y-%m-%d %H:%M:%S', localtime(time())),str(self.gametable.Tiles),Game.get_Tiles_names(self.gametable.Tiles),str(self.gametable.receive_cnt),Game.get_Cnt_names(self.gametable.receive_cnt))
+
+        print(debug_info_str)
+        with open('debug_info.txt','a') as f:
+            f.write(debug_info_str)
+
+
+
 
 class no_AI():
     def __init__(self,player,gametable):

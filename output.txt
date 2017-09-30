@@ -1,0 +1,45 @@
+[zx_AI(zrzr) vs zx_AI(nozr) vs zx_AI(nozr) vs zx_AI(nono)] 1次测试：
+zx_AI(zrzr)胜率:1.0
+zx_AI(nozr)胜率:0.0
+zx_AI(nozr)胜率:0.0
+zx_AI(nono)胜率:0.0
+[zx_AI(zrzr) vs zx_AI(nozr) vs zx_AI(nozr) vs zx_AI(nono)] 1次测试：
+zx_AI(zrzr)胜率:1.0
+zx_AI(nozr)胜率:0.0
+zx_AI(nozr)胜率:0.0
+zx_AI(nono)胜率:0.0
+[zx_AI(zrzr) vs zx_AI(nozr) vs zx_AI(nozr) vs zx_AI(nono)] 1次测试：
+zx_AI(zrzr)胜率:0.0
+zx_AI(nozr)胜率:0.0
+zx_AI(nozr)胜率:1.0
+zx_AI(nono)胜率:0.0
+[zx_AI(zrzr) vs zx_AI(nozr) vs zx_AI(nozr) vs zx_AI(nono)] 1次测试：
+zx_AI(zrzr)胜率:0.0
+zx_AI(nozr)胜率:0.0
+zx_AI(nozr)胜率:1.0
+zx_AI(nono)胜率:0.0
+[zx_AI(zrzr) vs zx_AI(nozr) vs zx_AI(nozr) vs zx_AI(nono)] 20次测试：
+zx_AI(zrzr)胜率:0.15
+zx_AI(nozr)胜率:0.35
+zx_AI(nozr)胜率:0.35
+zx_AI(nono)胜率:0.15
+[zx_AI(zrzr) vs zx_AI(nozr) vs zx_AI(nozr) vs zx_AI(nono)] 20次测试：
+zx_AI(zrzr)胜率:0.35
+zx_AI(nozr)胜率:0.15
+zx_AI(nozr)胜率:0.3
+zx_AI(nono)胜率:0.2
+[zx_AI(zrzr) vs zx_AI(nozr) vs zx_AI(nozr) vs zx_AI(nono)] 20次测试：
+zx_AI(zrzr)胜率:0.2
+zx_AI(nozr)胜率:0.4
+zx_AI(nozr)胜率:0.2
+zx_AI(nono)胜率:0.2
+[zx_AI(zrzr) vs zx_AI(nozr) vs zx_AI(nozr) vs zx_AI(nono)] 20次测试：
+zx_AI(zrzr)胜率:0.25
+zx_AI(nozr)胜率:0.2
+zx_AI(nozr)胜率:0.3
+zx_AI(nono)胜率:0.25
+[zx_AI(zrzr) vs zx_AI(zrno) vs zx_AI(nozr) vs zx_AI(nono)] 4次测试：
+zx_AI(zrzr)胜率:0.25
+zx_AI(zrno)胜率:0.25
+zx_AI(nozr)胜率:0.25
+zx_AI(nono)胜率:0.25
